@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Malaysian Mortgage Calculator - Calculate home loans, stamp duty, legal fees, and more for Malaysian property buyers">
+  <meta name="keywords" content="mortgage calculator, Malaysia, home loan, stamp duty, DSR, Islamic financing">
+  <title>Malaysian Mortgage Calculator | Kalkulator Pinjaman Perumahan</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <h1>Malaysian Mortgage Calculator</h1>
+      <p>Kalkulator Pinjaman Perumahan Malaysia</p>
+      <div class="badge">
+        <span class="flag">🇲🇾</span>
+        <span>For Malaysian Property Market</span>
+      </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav">
+      <button class="nav-btn active" data-tab="calculator">Loan Calculator</button>
+      <button class="nav-btn" data-tab="amortization">Amortization</button>
+      <button class="nav-btn" data-tab="extra-payment">Extra Payments</button>
+      <button class="nav-btn" data-tab="refinancing">Refinancing</button>
+      <button class="nav-btn" data-tab="affordability">Affordability</button>
+      <button class="nav-btn" data-tab="stamp-duty">Stamp Duty & Fees</button>
+    </nav>
+
+    <!-- Tab: Calculator -->
+    <section id="calculator" class="tab-content active">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">🧮</div>
+          <div>
+            <h2 class="card-title">Mortgage Calculator</h2>
+            <p class="card-subtitle">Calculate your monthly payments</p>
+          </div>
+        </div>
+
+        <form id="calculatorForm">
+          <!-- Loan Type Toggle -->
+          <div class="form-group" style="margin-bottom: var(--spacing-lg);">
+            <label class="form-label">Financing Type</label>
+            <div class="toggle-group">
+              <div class="toggle-option">
+                <input type="radio" name="loanType" id="typeConventional" value="conventional" checked>
+                <label for="typeConventional">Conventional</label>
+              </div>
+              <div class="toggle-option">
+                <input type="radio" name="loanType" id="typeIslamic" value="islamic">
+                <label for="typeIslamic">Islamic</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Islamic Options (hidden by default) -->
+          <div id="islamicOptions" class="form-group" style="display: none; margin-bottom: var(--spacing-lg);">
+            <label class="form-label">Islamic Financing Type</label>
+            <select id="islamicType" class="form-select">
+              <option value="mm">Musharakah Mutanaqisah (MM)</option>
+              <option value="murabahah">Murabahah (BBA)</option>
+            </select>
+            <p class="form-help">MM offers potential rebate on early settlement</p>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="loanAmount" class="form-label">Loan Amount (RM)</label>
+              <input type="number" id="loanAmount" class="form-input" placeholder="500,000" min="10000" step="1000" required>
+            </div>
+
+            <div class="form-group">
+              <label for="bankSelect" class="form-label">Bank / Custom Rate</label>
+              <select id="bankSelect" class="form-select">
+                <option value="custom">-- Custom Rate --</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="interestRate" class="form-label">Interest Rate (% p.a.)</label>
+              <input type="number" id="interestRate" class="form-input" placeholder="4.10" min="0" max="20" step="0.01" required>
+            </div>
+
+            <div class="form-group">
+              <label for="tenure" class="form-label">Loan Tenure (Years)</label>
+              <select id="tenure" class="form-select">
+                <option value="5">5 years</option>
+                <option value="10">10 years</option>
+                <option value="15">15 years</option>
+                <option value="20">20 years</option>
+                <option value="25">25 years</option>
+                <option value="30" selected>30 years</option>
+                <option value="35">35 years</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" style="margin-top: var(--spacing-lg);">
+            Calculate Monthly Payment
+          </button>
+        </form>
+
+        <!-- Results -->
+        <div id="calculatorResults" style="margin-top: var(--spacing-xl);"></div>
+      </div>
+    </section>
+
+    <!-- Tab: Amortization -->
+    <section id="amortization" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">📊</div>
+          <div>
+            <h2 class="card-title">Amortization Schedule</h2>
+            <p class="card-subtitle">View your complete payment breakdown</p>
+          </div>
+        </div>
+
+        <div id="amortizationTable">
+          <p class="text-muted" style="text-align: center; padding: var(--spacing-xl);">
+            Calculate a loan first to see the amortization schedule.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab: Extra Payments -->
+    <section id="extra-payment" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">💰</div>
+          <div>
+            <h2 class="card-title">Extra Payment Calculator</h2>
+            <p class="card-subtitle">See how extra payments reduce your loan</p>
+          </div>
+        </div>
+
+        <form id="extraPaymentForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="extraLoanAmount" class="form-label">Loan Amount (RM)</label>
+              <input type="number" id="extraLoanAmount" class="form-input" placeholder="500,000" min="10000" required>
+            </div>
+
+            <div class="form-group">
+              <label for="extraRate" class="form-label">Interest Rate (% p.a.)</label>
+              <input type="number" id="extraRate" class="form-input" placeholder="4.10" min="0" step="0.01" required>
+            </div>
+
+            <div class="form-group">
+              <label for="extraTenure" class="form-label">Loan Tenure (Years)</label>
+              <input type="number" id="extraTenure" class="form-input" placeholder="30" min="1" max="35" required>
+            </div>
+
+            <div class="form-group">
+              <label for="extraMonthlyPayment" class="form-label">Extra Monthly Payment (RM)</label>
+              <input type="number" id="extraMonthlyPayment" class="form-input" placeholder="500" min="0">
+              <p class="form-help">Additional amount paid each month</p>
+            </div>
+
+            <div class="form-group">
+              <label for="lumpSumPayment" class="form-label">Lump Sum Payment (RM)</label>
+              <input type="number" id="lumpSumPayment" class="form-input" placeholder="50,000" min="0">
+            </div>
+
+            <div class="form-group">
+              <label for="lumpSumMonth" class="form-label">Lump Sum Applied at Month</label>
+              <input type="number" id="lumpSumMonth" class="form-input" placeholder="12" min="1" value="12">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" style="margin-top: var(--spacing-lg);">
+            Calculate Savings
+          </button>
+        </form>
+
+        <div id="extraPaymentResults" style="margin-top: var(--spacing-xl);"></div>
+      </div>
+    </section>
+
+    <!-- Tab: Refinancing -->
+    <section id="refinancing" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">🔄</div>
+          <div>
+            <h2 class="card-title">Refinancing Comparison</h2>
+            <p class="card-subtitle">Compare your current loan vs refinancing</p>
+          </div>
+        </div>
+
+        <form id="refinancingForm">
+          <h4 style="margin-bottom: var(--spacing-md);">Current Loan</h4>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="currentBalance" class="form-label">Outstanding Balance (RM)</label>
+              <input type="number" id="currentBalance" class="form-input" placeholder="400,000" min="0" required>
+            </div>
+
+            <div class="form-group">
+              <label for="currentRate" class="form-label">Current Interest Rate (%)</label>
+              <input type="number" id="currentRate" class="form-input" placeholder="4.50" min="0" step="0.01" required>
+            </div>
+
+            <div class="form-group">
+              <label for="remainingYears" class="form-label">Remaining Tenure (Years)</label>
+              <input type="number" id="remainingYears" class="form-input" placeholder="25" min="1" required>
+            </div>
+          </div>
+
+          <h4 style="margin: var(--spacing-xl) 0 var(--spacing-md);">New Loan</h4>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="newRate" class="form-label">New Interest Rate (%)</label>
+              <input type="number" id="newRate" class="form-input" placeholder="3.80" min="0" step="0.01" required>
+            </div>
+
+            <div class="form-group">
+              <label for="newTenure" class="form-label">New Tenure (Years)</label>
+              <input type="number" id="newTenure" class="form-input" placeholder="30" min="1" max="35" required>
+            </div>
+
+            <div class="form-group">
+              <label for="closingCosts" class="form-label">Closing Costs (RM)</label>
+              <input type="number" id="closingCosts" class="form-input" placeholder="15,000" min="0">
+              <p class="form-help">Legal fees, stamp duty, valuation, etc.</p>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" style="margin-top: var(--spacing-lg);">
+            Compare Options
+          </button>
+        </form>
+
+        <div id="refinancingResults" style="margin-top: var(--spacing-xl);"></div>
+      </div>
+    </section>
+
+    <!-- Tab: Affordability -->
+    <section id="affordability" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">📋</div>
+          <div>
+            <h2 class="card-title">Affordability Calculator</h2>
+            <p class="card-subtitle">Check your maximum loan based on DSR</p>
+          </div>
+        </div>
+
+        <form id="affordabilityForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="monthlyIncome" class="form-label">Gross Monthly Income (RM)</label>
+              <input type="number" id="monthlyIncome" class="form-input" placeholder="8,000" min="0" required>
+            </div>
+
+            <div class="form-group">
+              <label for="existingCommitments" class="form-label">Existing Monthly Commitments (RM)</label>
+              <input type="number" id="existingCommitments" class="form-input" placeholder="500" min="0">
+              <p class="form-help">Car loans, credit cards, PTPTN, etc.</p>
+            </div>
+
+            <div class="form-group">
+              <label for="dsrLimit" class="form-label">DSR Limit (%)</label>
+              <select id="dsrLimit" class="form-select">
+                <option value="60" selected>60% (BNM Standard)</option>
+                <option value="65">65%</option>
+                <option value="70">70% (High Income)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="affordRate" class="form-label">Interest Rate (%)</label>
+              <input type="number" id="affordRate" class="form-input" placeholder="4.10" min="0" step="0.01" value="4.10" required>
+            </div>
+
+            <div class="form-group">
+              <label for="affordTenure" class="form-label">Loan Tenure (Years)</label>
+              <select id="affordTenure" class="form-select">
+                <option value="20">20 years</option>
+                <option value="25">25 years</option>
+                <option value="30" selected>30 years</option>
+                <option value="35">35 years</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" style="margin-top: var(--spacing-lg);">
+            Check Affordability
+          </button>
+        </form>
+
+        <div id="affordabilityResults" style="margin-top: var(--spacing-xl);"></div>
+      </div>
+    </section>
+
+    <!-- Tab: Stamp Duty -->
+    <section id="stamp-duty" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">📝</div>
+          <div>
+            <h2 class="card-title">Stamp Duty & Legal Fees</h2>
+            <p class="card-subtitle">Calculate upfront property purchase costs</p>
+          </div>
+        </div>
+
+        <form id="stampDutyForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="stampPropertyPrice" class="form-label">Property Price (RM)</label>
+              <input type="number" id="stampPropertyPrice" class="form-input" placeholder="600,000" min="0" required>
+            </div>
+
+            <div class="form-group">
+              <label for="loanMargin" class="form-label">Loan Margin (%)</label>
+              <select id="loanMargin" class="form-select">
+                <option value="90" selected>90%</option>
+                <option value="85">85%</option>
+                <option value="80">80%</option>
+                <option value="70">70%</option>
+              </select>
+              <p class="form-help">Down payment: 100% - loan margin</p>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Exemptions</label>
+              <div class="checkbox-group" style="margin-bottom: var(--spacing-sm);">
+                <input type="checkbox" id="firstTimeBuyer">
+                <label for="firstTimeBuyer">First-time home buyer (property ≤ RM500k)</label>
+              </div>
+              <div class="checkbox-group">
+                <input type="checkbox" id="applyHOC">
+                <label for="applyHOC">HOC exemption (if applicable)</label>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" style="margin-top: var(--spacing-lg);">
+            Calculate Total Costs
+          </button>
+        </form>
+
+        <div id="stampDutyResults" style="margin-top: var(--spacing-xl);"></div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Malaysian Mortgage Calculator | For educational and reference purposes only</p>
+      <p style="margin-top: var(--spacing-sm);">
+        Rates and fees are estimates. Please verify with your bank or financial advisor.
+      </p>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/calculations.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
