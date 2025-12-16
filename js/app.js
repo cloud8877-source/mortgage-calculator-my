@@ -787,28 +787,28 @@ function drawPaymentChart(principal, interest) {
   const centerY = rect.height / 2;
   const radius = Math.min(centerX, centerY) - 10;
 
-  // Draw principal slice (green)
+  // Draw principal slice (teal - primary color)
   const principalAngle = (principal / total) * 2 * Math.PI;
 
   ctx.beginPath();
   ctx.moveTo(centerX, centerY);
   ctx.arc(centerX, centerY, radius, -Math.PI / 2, -Math.PI / 2 + principalAngle);
   ctx.closePath();
-  ctx.fillStyle = '#22c55e';
+  ctx.fillStyle = '#0F766E';
   ctx.fill();
 
-  // Draw interest slice (red)
+  // Draw interest slice (amber - accent color)
   ctx.beginPath();
   ctx.moveTo(centerX, centerY);
   ctx.arc(centerX, centerY, radius, -Math.PI / 2 + principalAngle, -Math.PI / 2 + 2 * Math.PI);
   ctx.closePath();
-  ctx.fillStyle = '#ef4444';
+  ctx.fillStyle = '#D97706';
   ctx.fill();
 
   // Draw center circle (donut effect)
   ctx.beginPath();
   ctx.arc(centerX, centerY, radius * 0.55, 0, 2 * Math.PI);
-  ctx.fillStyle = '#1a1a2e';
+  ctx.fillStyle = '#F0FDFA';
   ctx.fill();
 }
 
